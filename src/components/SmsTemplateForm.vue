@@ -11,7 +11,7 @@ export default {
     },
     data () {
         return {
-            content: 'Initial content passed to editor'
+            content: ''
         }
     }
 }

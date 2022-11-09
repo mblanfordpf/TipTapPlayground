@@ -7,7 +7,7 @@
         <template v-if="items.length">
             <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items"
                 :key="index" @click="selectItem(index)">
-                {{ item }}
+                {{ item.display }}
             </button>
         </template>
         <div class="item" v-else>
@@ -29,19 +29,16 @@ export default {
             required: true,
         },
     },
-
     data () {
         return {
             selectedIndex: 0,
         }
     },
-
     watch: {
         items () {
             this.selectedIndex = 0
         },
     },
-
     methods: {
         onKeyDown ({ event }) {
             if (event.key === 'ArrowUp') {
@@ -61,21 +58,17 @@ export default {
 
             return false
         },
-
         upHandler () {
             this.selectedIndex = ((this.selectedIndex + this.items.length) - 1) % this.items.length
         },
-
         downHandler () {
             this.selectedIndex = (this.selectedIndex + 1) % this.items.length
         },
-
         enterHandler () {
             this.selectItem(this.selectedIndex)
         },
-
         selectItem (index) {
-            const item = this.items[index]
+            const item = this.items[index].display
 
             if (item) {
                 this.command({ id: item })

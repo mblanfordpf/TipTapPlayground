@@ -16,7 +16,8 @@ export type MentionOptions = {
 
 export const MentionPluginKey = new PluginKey('mention')
 
-export const Mention = Node.create<MentionOptions>({
+// export const Mention = Node.create<MentionOptions>({
+export const Mention = Node.create({
   name: 'mention',
 
   addOptions() {
