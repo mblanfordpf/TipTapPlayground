@@ -6,7 +6,7 @@
 
 # Background
 
-This is a very basic, proof-of-concept example of creating an editor with the ability to add merge tags through buttons and through typing the prefix `{{` in the editor. 
+This is a very basic, proof-of-concept example of creating an editor with the ability to add merge tags through buttons and through typing the prefix `{{` in the editor. We are using the TipTap library, with a number of extensions/plugins, plus one I have added (this is currently a lightly modified version of the Mention extension).
 
 # Output
 
