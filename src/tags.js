@@ -52,6 +52,7 @@ export default {
 
           return true
         }
+
         return component.ref?.onKeyDown(props)
       },
 

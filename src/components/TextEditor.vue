@@ -16,8 +16,8 @@
 <script>
 import StarterKit from '@tiptap/starter-kit'
 import Mention from '@tiptap/extension-mention'
+// import Mention from '../extension-mergetag'
 import Placeholder from '@tiptap/extension-placeholder'
-// import { Mention } from '../extension-mergetag/mergeTag.ts'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import tags from '../tags'
 
