@@ -9,10 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tiptap/extension-mention": "^2.0.0-beta.202",
-    "@tiptap/extension-placeholder": "^2.0.0-beta.202",
-    "@tiptap/starter-kit": "^2.0.0-beta.202",
-    "@tiptap/vue-3": "^2.0.0-beta.202",
     "vue": "^3.2.41"
   },
   "devDependencies": {

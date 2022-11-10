@@ -71,6 +71,7 @@ export default {
             ],
             content: this.modelValue,
             onUpdate: () => {
+                // FIXME: modify this here (or in MergeTag?) so the wrapped styling/data stuff is omitted from the saved HTML?
                 this.$emit('update:modelValue', this.editor.getHTML())
             },
         })
