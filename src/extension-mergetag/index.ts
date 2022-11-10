@@ -1,5 +1,5 @@
-import { Mention } from './mergeTag'
+import { MergeTag } from './mergeTag'
 
 export * from './mergeTag'
 
-export default Mention
+export default MergeTag

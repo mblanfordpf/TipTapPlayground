@@ -1,6 +1,6 @@
 <template>
     <div v-if="editor">
-        <button @click.prevent="showMergeTagMenu = !showMergeTagMenu"
+        <button @click.prevent="openMergeTagMenu"
             :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
             Merge Tags
         </button>
@@ -16,7 +16,7 @@
 <script>
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
-import Mention from '../extension-mergetag'
+import MergeTag from '../extension-mergetag'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import tags from '../tags'
 
@@ -54,18 +54,15 @@ export default {
         this.editor = new Editor({
             extensions: [
                 StarterKit,
-                Mention.configure({
+                MergeTag.configure({
                     HTMLAttributes: {
-                        class: 'mention',
+                        class: 'merge-tag',
                     },
                     suggestion: {
                         items: ({ query }) => {
                             return this.tags.filter(item => item.display.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
                         },
-                        char: '{{',
-                        allowedPrefixes: [' '],
                         ...tags // Just the render() function - could we use our own component instead of the tippy popup?
-                        // TODO: further config
                     }
                 }),
                 Placeholder.configure({
@@ -107,12 +104,12 @@ export default {
             ]
         },
         openMergeTagMenu () {
-            console.log('Show merge tag menu')
+            this.showMergeTagMenu = !this.showMergeTagMenu
             // TODO: Create a merge tag menu component
         },
         insertMergeTag (selectedTag) {
             this.editor.commands.insertContent(
-                `<span data-type="mention" class="mention" data-id="${selectedTag}" contenteditable="false">{{ ${selectedTag} }}</span>`
+                `<span data-type="merge-tag" class="merge-tag" data-id="${selectedTag}" contenteditable="false">{{ ${selectedTag} }}</span>`
             )
         }
     }
@@ -120,10 +117,19 @@ export default {
 </script>
 
 <style>
-.mention {
-    border: 1px solid #adb5bd;
+.merge-tag {
+    background: #dcf6ff;
     border-radius: 8px;
     padding: 4px 6px;
+}
+
+.ProseMirror {
+    border: 2px lightgrey solid;
+    border-radius: 8px;
+    width: 50vw;
+    height: 40vh;
+    margin: auto;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
