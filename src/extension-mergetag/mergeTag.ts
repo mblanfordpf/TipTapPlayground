@@ -1,34 +1,33 @@
-// TODO: This is a copy of the extension-mention source code
-// TODO: Repurpose this to export a constant called 'MergeTag', which does what we want it to do...
 import { mergeAttributes, Node } from '@tiptap/core'
 import Suggestion, { SuggestionOptions } from '@tiptap/suggestion'
 import { Node as ProseMirrorNode } from 'prosemirror-model'
 import { PluginKey } from 'prosemirror-state'
 
-export type MentionOptions = {
+export type MergeTagOptions = {
   HTMLAttributes: Record<string, any>,
   renderLabel: (props: {
-    options: MentionOptions,
+    options: MergeTagOptions,
     node: ProseMirrorNode,
   }) => string,
   suggestion: Omit<SuggestionOptions, 'editor'>,
+  tagPrefix: string,
+  tagSuffix: string
 }
 
-export const MentionPluginKey = new PluginKey('mention')
+export const MergeTagPluginKey = new PluginKey('merge-tag')
 
-// export const Mention = Node.create<MentionOptions>({
-export const Mention = Node.create({
-  name: 'mention',
+export const MergeTag = Node.create<MergeTagOptions>({
+  name: 'merge-tag',
 
   addOptions() {
     return {
       HTMLAttributes: {},
       renderLabel({ options, node }) {
-        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
+        return `${options.tagPrefix} ${node.attrs.label ?? node.attrs.id} ${options.tagSuffix}`
       },
       suggestion: {
-        char: '@',
-        pluginKey: MentionPluginKey,
+        char: '{{',
+        pluginKey: MergeTagPluginKey,
         command: ({ editor, range, props }) => {
           // increase range.to by one when the next node is of type "text"
           // and starts with a space character
@@ -64,6 +63,8 @@ export const Mention = Node.create({
           return allow
         },
       },
+      tagPrefix: '{{',
+      tagSuffix: '}}'
     }
   },
 
