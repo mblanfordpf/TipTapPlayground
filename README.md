@@ -16,4 +16,4 @@ I'm not completely clear on how we want to store the output in the database and 
 
 # Other notes
 
-As mentioned, this is a hastily-constructed (using the TipTap docs), exploratory, barebones version that will require a lot of refinement and a better thought-out appraoch, but hopefully it can serve to demonstrate the suitability of TipTap for our purposes. 
+As mentioned, this is a hastily-constructed (using the TipTap docs), exploratory, barebones version that will require a lot of refinement and a better thought-out approach, but hopefully it can at least serve to demonstrate the suitability of TipTap for our purposes (and possibly highlight some issues for further discussion/thought). 
