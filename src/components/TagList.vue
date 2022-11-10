@@ -1,5 +1,6 @@
 <!-- TODO: This component is the popup list that is rendered when the opening tag is entered -->
-<!--  This is rendered in the editor via the render method in tags.js -->
+<!-- This uses tippy.js here, but we can use our own -->
+<!-- The popup is rendered in the editor via the render method in tags.js -->
 <!-- The render method is a config property passed to the extension config object -->
 <!-- The extension config object is added in the extensions property of the Editor class in TextEdito.vue -->
 <template>

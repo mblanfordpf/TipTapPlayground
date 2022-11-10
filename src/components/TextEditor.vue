@@ -71,6 +71,7 @@ export default {
             ],
             content: this.modelValue,
             onUpdate: () => {
+                console.log(this.editor.getText())
                 this.$emit('update:modelValue', this.editor.getHTML())
             },
         })
