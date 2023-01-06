@@ -2,17 +2,9 @@
     <text-editor v-model="content" />
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue'
 import TextEditor from './TextEditor.vue'
 
-export default {
-    components: {
-        TextEditor
-    },
-    data () {
-        return {
-            content: ''
-        }
-    }
-}
+const content = ref('')
 </script>
