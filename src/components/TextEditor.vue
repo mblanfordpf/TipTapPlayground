@@ -9,7 +9,7 @@
                 {{ tag.display }}
             </button>
         </div>
-        <editor-content v-if="editor" :editor="/* @ts-ignore */ editor" />
+        <editor-content v-if="editor" :editor="editorInt" />
     </div>
 </template>
 
@@ -19,7 +19,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import MergeTag from '../extension-mergetag'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import tagSuggestions from '../tags'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps<{
   modelValue: string
@@ -35,6 +35,7 @@ interface Tag {
 }
 
 const editor = ref<Editor|null>(null)
+const editorInt = computed<any>(() => editor.value)
 
 const tags = ref<Tag[]>([
   {
