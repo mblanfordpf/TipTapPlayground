@@ -118,7 +118,8 @@ function insertMergeTag ({ value, display }: Tag) {
     width: 50vw;
     height: 40vh;
     margin: auto;
-    font-family: Arial, Helvetica, sans-serif
+    font-family: Arial, Helvetica, sans-serif;
+    color: #8c91f3;
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
