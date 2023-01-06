@@ -17,69 +17,61 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        items: {
-            type: Array,
-            required: true,
-        },
+<script setup lang="ts">
+import { ref, watch } from 'vue'
 
-        command: {
-            type: Function,
-            required: true,
-        },
-    },
-    data () {
-        return {
-            selectedIndex: 0,
-        }
-    },
-    watch: {
-        items () {
-            this.selectedIndex = 0
-        },
-    },
-    methods: {
-        onKeyDown ({ event }) {
-            if (event.key === 'ArrowUp') {
-                this.upHandler()
-                return true
-            }
+const props = defineProps<{
+  items: { display: string }[]
+  command: (x: { id: string }) => void
+}>()
 
-            if (event.key === 'ArrowDown') {
-                this.downHandler()
-                return true
-            }
+const selectedIndex = ref(0)
 
-            if (event.key === 'Enter') {
-                this.enterHandler()
-                return true
-            }
+watch(() => props.items, () => {
+  selectedIndex.value = 0
+})
 
-            return false
-        },
-        upHandler () {
-            this.selectedIndex = ((this.selectedIndex + this.items.length) - 1) % this.items.length
-        },
-        downHandler () {
-            this.selectedIndex = (this.selectedIndex + 1) % this.items.length
-        },
-        enterHandler () {
-            this.selectItem(this.selectedIndex)
-        },
-        selectItem (index) {
-            const item = this.items[index].display
+function onKeyDown ({ event }: { event: KeyboardEvent }) {
+  if (event.key === 'ArrowUp') {
+    upHandler()
+    return true
+  }
 
-            if (item) {
-                this.command({ id: item })
-            }
-        },
-    },
+  if (event.key === 'ArrowDown') {
+    downHandler()
+    return true
+  }
+
+  if (event.key === 'Enter') {
+    enterHandler()
+    return true
+  }
+
+  return false
+}
+
+function upHandler () {
+  selectedIndex.value = ((selectedIndex.value + props.items.length) - 1) % props.items.length
+}
+
+function downHandler () {
+  selectedIndex.value = (selectedIndex.value + 1) % props.items.length
+}
+
+function enterHandler () {
+  selectItem(selectedIndex.value)
+}
+
+function selectItem (index: number) {
+  const item = props.items[index].display
+
+  if (item) {
+    props.command({ id: item })
+  }
 }
 </script>
 
-<style>
+<style scoped>
 .items {
     padding: 0.2rem;
     position: relative;

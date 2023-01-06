@@ -4,18 +4,11 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import SmsTemplateForm from './components/SmsTemplateForm.vue'
-
-export default {
-  name: 'App',
-  components: {
-    SmsTemplateForm
-  }
-}
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

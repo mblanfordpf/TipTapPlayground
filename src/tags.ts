@@ -1,15 +1,16 @@
-import { VueRenderer } from '@tiptap/vue-3'
-import tippy from 'tippy.js'
+import { Editor, VueRenderer } from '@tiptap/vue-3'
+import tippy, { Instance as TippyInstance } from 'tippy.js'
 
 import TagList from './components/TagList.vue'
+import { SuggestionOptions } from '@tiptap/suggestion'
 
-export default {
-  render: () => {
-    let component
-    let popup
+const suggestions: Omit<SuggestionOptions, 'editor'> = {
+  render () {
+    let component: VueRenderer
+    let popup: TippyInstance
 
     return {
-      onStart: props => {
+      onStart (props) {
         component = new VueRenderer(TagList, {
           // using vue 2:
           // parent: this,
@@ -19,11 +20,12 @@ export default {
           editor: props.editor,
         })
 
-        if (!props.clientRect) {
+        if (props.clientRect == null) {
           return
         }
 
-        popup = tippy('body', {
+        // @ts-ignore
+        [popup] = tippy('body', {
           getReferenceClientRect: props.clientRect,
           appendTo: () => document.body,
           content: component.element,
@@ -41,14 +43,15 @@ export default {
           return
         }
 
-        popup[0].setProps({
+        popup.setProps({
+          // @ts-ignore
           getReferenceClientRect: props.clientRect,
         })
       },
 
-      onKeyDown(props) {
+      onKeyDown (props) {
         if (props.event.key === 'Escape') {
-          popup[0].hide()
+          popup.hide()
 
           return true
         }
@@ -57,9 +60,11 @@ export default {
       },
 
       onExit() {
-        popup[0].destroy()
+        popup.destroy()
         component.destroy()
       },
     }
   },
 }
+
+export default suggestions

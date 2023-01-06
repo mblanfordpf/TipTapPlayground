@@ -5,116 +5,104 @@
             Merge Tags
         </button>
         <div v-if="showMergeTagMenu">
-            <button v-for="tag, i in tags" :key="i"  @click.prevent="insertMergeTag(tag.display)">
+            <button v-for="(tag, i) in tags" :key="i" @click.prevent="insertMergeTag(tag)">
                 {{ tag.display }}
             </button>
         </div>
-        <editor-content :editor="editor" />
+        <editor-content v-if="editor // @ts-ignore" :editor="editor" />
     </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import MergeTag from '../extension-mergetag'
 import { Editor, EditorContent } from '@tiptap/vue-3'
-import tags from '../tags'
+import tagSuggestions from '../tags'
+import { onMounted, onUnmounted, ref } from 'vue'
 
-export default {
-    components: {
-        EditorContent,
-    },
-    props: {
-        modelValue: {
-            type: String,
-            default: '',
-        },
-    },
-    emits: ['update:modelValue'],
-    data () {
-        return {
-            editor: null,
-            tags: null,
-            showMergeTagMenu: false
-        }
-    },
-    watch: {
-        modelValue (value) {
-            const isSame = this.editor.getHTML() === value
+const props = defineProps<{
+  modelValue: string
+}>()
 
-            if (isSame) {
-                return
-            }
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
 
-            this.editor.commands.setContent(value, false)
-        },
-    },
-    mounted () {
-        this.fetchMergeTags()
-        this.editor = new Editor({
-            extensions: [
-                StarterKit,
-                MergeTag.configure({
-                    HTMLAttributes: {
-                        class: 'merge-tag',
-                    },
-                    suggestion: {
-                        items: ({ query }) => {
-                            return this.tags.filter(item => item.display.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
-                        },
-                        ...tags // Just the render() function - could we use our own component instead of the tippy popup?
-                    }
-                }),
-                Placeholder.configure({
-                    placeholder: 'Enter some text!'
-                })
-            ],
-            content: this.modelValue,
-            onUpdate: () => {
-                console.log(this.editor.getText())
-                this.$emit('update:modelValue', this.editor.getHTML())
-            },
-        })
-    },
-    beforeUnmount () {
-        this.editor.destroy()
-    },
-    methods: {
-        fetchMergeTags () {
-            this.tags = [
-                {
-                    value: 'tag1',
-                    display: 'Tag 1'
-                },
-                {
-                    value: 'tag2',
-                    display: 'Tag 2'
-                },
-                {
-                    value: 'tag3',
-                    display: 'Tag 3'
-                },
-                {
-                    value: 'tag4',
-                    display: 'Tag 4'
-                },
-                {
-                    value: 'tag5',
-                    display: 'Tag 5'
-                }
-            ]
-        },
-        openMergeTagMenu () {
-            this.showMergeTagMenu = !this.showMergeTagMenu
-            // TODO: Create a merge tag menu component
-        },
-        insertMergeTag (selectedTag) {
-            this.editor.commands.insertContent(
-                `<span data-type="merge-tag" class="merge-tag" data-id="${selectedTag}" contenteditable="false">{{ ${selectedTag} }}</span>`
-            )
-        }
-    }
+interface Tag {
+  value: string
+  display: string
 }
+
+const editor = ref<Editor|null>(null)
+
+const tags = ref<Tag[]>([
+  {
+    value: 'tag1',
+    display: 'Tag 1'
+  },
+  {
+    value: 'tag2',
+    display: 'Tag 2'
+  },
+  {
+    value: 'tag3',
+    display: 'Tag 3'
+  },
+  {
+    value: 'tag4',
+    display: 'Tag 4'
+  },
+  {
+    value: 'tag5',
+    display: 'Tag 5'
+  },
+])
+
+const showMergeTagMenu = ref(false)
+
+onMounted(() => {
+  editor.value = new Editor({
+    extensions: [
+      StarterKit,
+      MergeTag.configure({
+        HTMLAttributes: {
+          class: 'merge-tag',
+        },
+        suggestion: {
+          items: ({ query }) => {
+            return tags.value.filter(item => item.display.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+          },
+          ...tagSuggestions // Just the render() function - could we use our own component instead of the tippy popup?
+        }
+      }),
+      Placeholder.configure({
+        placeholder: 'Enter some text!'
+      })
+    ],
+    content: props.modelValue,
+    onUpdate: () => {
+      console.log(editor.value?.getText())
+      emit('update:modelValue', editor.value?.getHTML() ?? '')
+    },
+  })
+})
+
+onUnmounted(() => {
+  editor.value?.destroy()
+})
+
+function openMergeTagMenu () {
+  showMergeTagMenu.value = !showMergeTagMenu.value
+  // TODO: Create a merge tag menu component
+}
+
+function insertMergeTag ({ value, display }: Tag) {
+  editor.value?.commands.insertContent(
+    `<span data-type="merge-tag" class="merge-tag" data-id="${value}" contenteditable="false">{{ ${display} }}</span>`
+  )
+}
+
 </script>
 
 <style>
