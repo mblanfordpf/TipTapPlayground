@@ -26,7 +26,7 @@ export const MergeTag = Node.create<MergeTagOptions>({
         return `${options.tagPrefix} ${node.attrs.label ?? node.attrs.id} ${options.tagSuffix}`
       },
       suggestion: {
-        char: '{{',
+        char: '{',
         pluginKey: MergeTagPluginKey,
         command: ({ editor, range, props }) => {
           // increase range.to by one when the next node is of type "text"
@@ -72,7 +72,7 @@ export const MergeTag = Node.create<MergeTagOptions>({
 
   inline: true,
 
-  selectable: false,
+  selectable: true,
 
   atom: true,
 
