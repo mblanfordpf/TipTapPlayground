@@ -9,7 +9,7 @@
                 {{ tag.display }}
             </button>
         </div>
-        <editor-content v-if="editor // @ts-ignore" :editor="editor" />
+        <editor-content v-if="editor" :editor="/* @ts-ignore */ editor" />
     </div>
 </template>
 
