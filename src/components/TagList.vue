@@ -8,7 +8,7 @@
         <template v-if="items.length">
             <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items"
                 :key="index" @click="selectItem(index)">
-                <template v-for="menu in item.menu">{{ menu }} <span class="crumb">&gt;</span> </template>
+                <template v-for="crumb in item.breadcrumbs">{{ crumb }} <span class="crumb-sep">&gt;</span> </template>
                 {{ item.name }}
             </button>
         </template>

@@ -68,7 +68,7 @@ onUnmounted(() => {
 })
 
 function tagMatches (tag: FlatTag, query: string): boolean {
-  return searchMatch(tag.name, query) || tag.menu.some(m => searchMatch(m, query))
+  return searchMatch(tag.name, query) || tag.breadcrumbs.some(m => searchMatch(m, query))
 }
 
 function searchMatch (text: string, query: string): boolean {
