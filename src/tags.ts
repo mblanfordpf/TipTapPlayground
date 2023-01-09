@@ -6,6 +6,10 @@ export interface Tag {
   sample: string
 }
 
+export interface FlatTag extends Tag {
+  menu: string[]
+}
+
 export interface TagGroup {
   name: string
   rules?: Rules
@@ -22,18 +26,18 @@ export interface Rule {
 
 export type MergeTags = Record<string, Tag | TagGroup>
 
-export function flatten (mergeTags: MergeTags): Tag[] {
+export function flatten (mergeTags: MergeTags, menu: string[] = []): FlatTag[] {
   return reduce(
     mergeTags,
-    (tags: Tag[], obj): Tag[] => {
+    (tags: FlatTag[], obj): FlatTag[] => {
       if ('value' in obj) {
-        tags.push(obj)
+        tags.push({ ...obj, menu })
       }
 
       if ('mergeTags' in obj) {
         return [
           ...tags,
-          ...flatten(obj.mergeTags)
+          ...flatten(obj.mergeTags, [...menu, obj.name])
         ]
       }
 

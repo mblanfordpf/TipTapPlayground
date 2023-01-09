@@ -8,6 +8,7 @@
         <template v-if="items.length">
             <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items"
                 :key="index" @click="selectItem(index)">
+                <template v-for="menu in item.menu">{{ menu }} &gt;</template>
                 {{ item.name }}
             </button>
         </template>
@@ -19,10 +20,10 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
-import { Tag } from '../tags'
+import { FlatTag } from '../tags'
 
 const props = defineProps<{
-  items: Tag[]
+  items: FlatTag[]
   command: (x: { id: string }) => void
 }>()
 
