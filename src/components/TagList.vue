@@ -8,7 +8,7 @@
         <template v-if="items.length">
             <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items"
                 :key="index" @click="selectItem(index)">
-                {{ item.display }}
+                {{ item.name }}
             </button>
         </template>
         <div class="item" v-else>
@@ -19,9 +19,10 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { Tag } from '../tags'
 
 const props = defineProps<{
-  items: { display: string }[]
+  items: Tag[]
   command: (x: { id: string }) => void
 }>()
 
@@ -65,7 +66,7 @@ function moveItemSelection (by: number): void {
 }
 
 function selectItem (index: number) {
-  const item = props.items[index].display
+  const item = props.items[index].name
 
   if (item) {
     props.command({ id: item })

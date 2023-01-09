@@ -6,7 +6,7 @@
         </button>
         <div v-if="showMergeTagMenu">
             <button v-for="(tag, i) in tags" :key="i" @click.prevent="insertMergeTag(tag)">
-                {{ tag.display }}
+                {{ tag.name }}
             </button>
         </div>
         <editor-content v-if="editor" :editor="editorInt" />
@@ -20,6 +20,7 @@ import MergeTag from '../extension-mergetag'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import tagSuggestions from '../tagSuggestions'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { Tag } from '../tags'
 
 const props = defineProps<{
   modelValue: string
@@ -29,11 +30,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
-
-interface Tag {
-  value: string
-  display: string
-}
 
 const editor = ref<Editor|null>(null)
 const editorInt = computed<any>(() => editor.value)
@@ -50,7 +46,7 @@ onMounted(() => {
         },
         suggestion: {
           items: ({ query }) => {
-            return props.tags.filter(item => item.display.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+            return props.tags.filter(item => item.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
           },
           ...tagSuggestions // Just the render() function - could we use our own component instead of the tippy popup?
         }
@@ -76,9 +72,9 @@ function openMergeTagMenu () {
   // TODO: Create a merge tag menu component
 }
 
-function insertMergeTag ({ value, display }: Tag) {
+function insertMergeTag ({ value, sample }: Tag) {
   editor.value?.commands.insertContent(
-    `<span data-type="merge-tag" class="merge-tag" data-id="${value}" contenteditable="false">{{ ${display} }}</span>`
+    `<span data-type="merge-tag" class="merge-tag" data-id="${value}" contenteditable="false">${sample}</span>`
   )
 }
 

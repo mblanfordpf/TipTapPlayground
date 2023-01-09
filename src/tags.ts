@@ -22,6 +22,27 @@ export interface Rule {
 
 export type MergeTags = Record<string, Tag | TagGroup>
 
+export function flatten (mergeTags: MergeTags): Tag[] {
+  return reduce(
+    mergeTags,
+    (tags: Tag[], obj): Tag[] => {
+      if ('value' in obj) {
+        tags.push(obj)
+      }
+
+      if ('mergeTags' in obj) {
+        return [
+          ...tags,
+          ...flatten(obj.mergeTags)
+        ]
+      }
+
+      return tags
+    },
+    []
+  )
+}
+
 export const baseMergeTags: MergeTags = {
   account: {
     name: 'Account',
