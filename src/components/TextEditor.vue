@@ -23,6 +23,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps<{
   modelValue: string
+  tags: Tag[]
 }>()
 
 const emit = defineEmits<{
@@ -37,29 +38,6 @@ interface Tag {
 const editor = ref<Editor|null>(null)
 const editorInt = computed<any>(() => editor.value)
 
-const tags = ref<Tag[]>([
-  {
-    value: 'tag1',
-    display: 'Tag 1'
-  },
-  {
-    value: 'tag2',
-    display: 'Tag 2'
-  },
-  {
-    value: 'tag3',
-    display: 'Tag 3'
-  },
-  {
-    value: 'tag4',
-    display: 'Tag 4'
-  },
-  {
-    value: 'tag5',
-    display: 'Tag 5'
-  },
-])
-
 const showMergeTagMenu = ref(false)
 
 onMounted(() => {
@@ -72,7 +50,7 @@ onMounted(() => {
         },
         suggestion: {
           items: ({ query }) => {
-            return tags.value.filter(item => item.display.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+            return props.tags.filter(item => item.display.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
           },
           ...tagSuggestions // Just the render() function - could we use our own component instead of the tippy popup?
         }
