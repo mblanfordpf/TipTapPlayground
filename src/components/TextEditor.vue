@@ -20,11 +20,11 @@ import MergeTag from '../extension-mergetag'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import tagSuggestions from '../tagSuggestions'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { Tag } from '../tags'
+import { FlatTag, Tag } from '../tags'
 
 const props = defineProps<{
   modelValue: string
-  tags: Tag[]
+  tags: FlatTag[]
 }>()
 
 const emit = defineEmits<{
@@ -46,7 +46,7 @@ onMounted(() => {
         },
         suggestion: {
           items: ({ query }) => {
-            return props.tags.filter(item => item.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+            return props.tags.filter(tag => tagMatches(tag, query)).slice(0, 5)
           },
           ...tagSuggestions // Just the render() function - could we use our own component instead of the tippy popup?
         }
@@ -66,6 +66,14 @@ onMounted(() => {
 onUnmounted(() => {
   editor.value?.destroy()
 })
+
+function tagMatches (tag: FlatTag, query: string): boolean {
+  return searchMatch(tag.name, query) || tag.menu.some(m => searchMatch(m, query))
+}
+
+function searchMatch (text: string, query: string): boolean {
+  return text.toLowerCase().startsWith(query.toLowerCase())
+}
 
 function openMergeTagMenu () {
   showMergeTagMenu.value = !showMergeTagMenu.value
