@@ -8,7 +8,7 @@
         <template v-if="items.length">
             <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items"
                 :key="index" @click="selectItem(index)">
-                <template v-for="menu in item.menu">{{ menu }} &gt;</template>
+                <template v-for="menu in item.menu">{{ menu }} <span class="crumb">&gt;</span> </template>
                 {{ item.name }}
             </button>
         </template>
@@ -103,5 +103,9 @@ function selectItem (index: number) {
 
 .is-selected {
     background-color: bisque;
+}
+
+.crumb {
+  color: #adb5bd;
 }
 </style>
