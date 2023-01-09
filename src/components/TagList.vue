@@ -43,19 +43,21 @@ function onKeyDown (event: KeyboardEvent) {
   switch (event.key) {
     case 'ArrowUp':
       moveItemSelection(-1)
-      event.preventDefault()
-      return
+      break
 
     case 'ArrowDown':
       moveItemSelection(1)
-      event.preventDefault()
-      return
+      break
 
     case 'Enter':
       selectItem(selectedIndex.value)
-      event.preventDefault()
+      break
+
+    default:
       return
   }
+
+  event.preventDefault()
 }
 
 function moveItemSelection (by: number): void {
