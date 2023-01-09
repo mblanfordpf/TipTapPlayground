@@ -18,7 +18,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import MergeTag from '../extension-mergetag'
 import { Editor, EditorContent } from '@tiptap/vue-3'
-import tagSuggestions from '../tags'
+import tagSuggestions from '../tagSuggestions'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps<{
