@@ -1,4 +1,4 @@
-import { Editor, VueRenderer } from '@tiptap/vue-3'
+import { VueRenderer } from '@tiptap/vue-3'
 import tippy, { Instance as TippyInstance } from 'tippy.js'
 
 import TagList from './components/TagList.vue'
