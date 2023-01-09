@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps<{
   items: { display: string }[]
@@ -27,39 +27,39 @@ const props = defineProps<{
 
 const selectedIndex = ref(0)
 
+onMounted(() => {
+  document.addEventListener('keydown', onKeyDown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeyDown)
+})
+
 watch(() => props.items, () => {
   selectedIndex.value = 0
 })
 
-function onKeyDown ({ event }: { event: KeyboardEvent }) {
-  if (event.key === 'ArrowUp') {
-    upHandler()
-    return true
-  }
+function onKeyDown (event: KeyboardEvent) {
+  switch (event.key) {
+    case 'ArrowUp':
+      moveItemSelection(-1)
+      event.preventDefault()
+      return
 
-  if (event.key === 'ArrowDown') {
-    downHandler()
-    return true
-  }
+    case 'ArrowDown':
+      moveItemSelection(1)
+      event.preventDefault()
+      return
 
-  if (event.key === 'Enter') {
-    enterHandler()
-    return true
+    case 'Enter':
+      selectItem(selectedIndex.value)
+      event.preventDefault()
+      return
   }
-
-  return false
 }
 
-function upHandler () {
-  selectedIndex.value = ((selectedIndex.value + props.items.length) - 1) % props.items.length
-}
-
-function downHandler () {
-  selectedIndex.value = (selectedIndex.value + 1) % props.items.length
-}
-
-function enterHandler () {
-  selectItem(selectedIndex.value)
+function moveItemSelection (by: number): void {
+  selectedIndex.value = (selectedIndex.value + props.items.length + by) % props.items.length
 }
 
 function selectItem (index: number) {
@@ -73,12 +73,12 @@ function selectItem (index: number) {
 
 <style scoped>
 .items {
-    padding: 0.2rem;
+  max-height: 10rem;
+  overflow: auto;
     position: relative;
     border-radius: 0.5rem;
-    background: #FFF;
+    background: #2c3e50;
     color: rgba(0, 0, 0, 0.8);
-    overflow: hidden;
     font-size: 0.9rem;
     box-shadow:
         0 0 0 1px rgba(0, 0, 0, 0.05),
